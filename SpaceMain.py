@@ -1,7 +1,7 @@
 #Header 
 """
 quoi :Programme principal du projet Space Invador
-qui : Baptiste Boiteux
+qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
 """
@@ -9,6 +9,10 @@ repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
 #Importation des bibilothèques
 import SpaceFonction as f
 from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, PhotoImage,filedialog, Menu
+
+class vaisseau:
+    def __init__(self):
+        self.Zone_jeux.create
 
 # création de la fenêtre graphique
 mw = Tk()
@@ -18,8 +22,8 @@ mw.title('Space Invader')
 # Création d'un widget Canvas (zone graphique)
 Largeur = 480
 Hauteur = 320
-Canevas = Canvas(mw, width = Largeur, height =Hauteur, bg ='grey')
-Canevas.pack(side = 'top',padx =5, pady =5)
+Zone_jeux = Canvas(mw, width = Largeur, height =Hauteur, bg ='grey')
+Zone_jeux.pack(side = 'top',padx =5, pady =5)
 # Création d'un widget Label (score)
 Label1 = Label(mw,textvariable = score)
 Label1.pack(side = 'bottom', padx = 5, pady = 5)
