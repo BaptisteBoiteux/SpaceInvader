@@ -8,22 +8,34 @@ repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
 
 #Importation des bibilothèques
 import SpaceFonction as f
-from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, PhotoImage,filedialog
+from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, PhotoImage,filedialog, Menu
 
 # création de la fenêtre graphique
 mw = Tk()
-mw.title('Pendu')
+score = StringVar()
+score.set("score:0")
+mw.title('Space Invader')
 # Création d'un widget Canvas (zone graphique)
 Largeur = 480
 Hauteur = 320
 Canevas = Canvas(mw, width = Largeur, height =Hauteur, bg ='grey')
-Canevas.pack(side = 'right',padx =5, pady =5)
+Canevas.pack(side = 'top',padx =5, pady =5)
 # Création d'un widget Label (score)
-Label1 = Label(mw,)
+Label1 = Label(mw,textvariable = score)
 Label1.pack(side = 'bottom', padx = 5, pady = 5)
-# Création d'un widget Button (bouton Commencer)
-Button(mw, text ='Commencer' ).pack(side='left',padx=5,pady=5)
 # Création d'un widget Button (bouton Quitter)
-Button(mw, text ='Quitter' ,command = mw.destroy).pack(side='left',padx=5,pady=5)
+Button(mw, text ='Quitter' ,command = mw.destroy).pack(side='bottom',padx=5,pady=5)
+# Création d'un widget Button (bouton Commencer)
+Button(mw, text ='Commencer', command = f.Debut ).pack(side='bottom',padx=5,pady=5)
+# Création d'un widget Menu
+menubar = Menu(mw)
+menuoptions = Menu(menubar,tearoff = 0)
+menuoptions.add_command(label = "Quitter",command = mw.destroy)
+menubar.add_cascade(label = "Options", menu = menuoptions)
+menuaide = Menu(menubar,tearoff = 0)
+menuaide.add_command(label = "A propos",command = f.Apropos)
+menubar.add_cascade(label = "Aide", menu = menuaide)
+# Affichage du menu
+mw.config(menu = menubar)
 #lancement du gestionnaire d'événements
 mw.mainloop()
