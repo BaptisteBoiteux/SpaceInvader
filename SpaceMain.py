@@ -4,34 +4,40 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
+TODO : voir bug debut deplacement et acceleration bouton commencer
 """
 
 #Importation des bibilothèques
 import SpaceFonction as f
 from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, PhotoImage,filedialog, Menu
 
+class Alien():
+    def __init__(self,largeur,hauteur):
+        self.largeur = largeur
+        self.hauteur = hauteur
 
-largeur = 480
-hauteur = 320
+alien0 = Alien(60,20)
+largeur_mw = 480
+hauteur_mw = 320
 x = 20
-moitie_alien = 20
+moitie_x = alien0.largeur/2
 dx = 2
 
 def deplacement_alien():
     """ Deplacement de l'alien"""
-    global x,dx,largeur,hauteur
+    global x,dx,largeur_mw,hauteur_mw
     # rebond à droite
-    if x+moitie_alien+ dx > largeur:
-        x = 2*(largeur-moitie_alien)-x
+    if x+moitie_x+ dx > largeur_mw:
+        x = 2*(largeur_mw-moitie_x)-x
         dx = -dx
         
     # rebond à gauche
-    if x-moitie_alien+dx < 0:
-        x = 2*moitie_alien-x
+    if x-moitie_x+dx < 0:
+        x = 2*moitie_x-x
         dx = -dx
     x = x+dx
     # affichage
-    Zone_jeux.coords(alien,x-moitie_alien,10,x+moitie_alien,50)
+    Zone_jeux.coords(alien,x-moitie_x,10,x+moitie_x,50)
     # mise à jour toutes les 200ms
     mw.after(50,deplacement_alien)
 
@@ -41,9 +47,9 @@ score = StringVar()
 score.set("score:0")
 mw.title('Bretons Invader')
 # Création d'un widget Canvas (zone graphique)
-Zone_jeux = Canvas(mw, width = largeur, height = hauteur, bg ='grey')
+Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
-alien = Zone_jeux.create_rectangle(x-moitie_alien,10,x+moitie_alien,50)
+alien = Zone_jeux.create_rectangle(x-moitie_x,10,x+moitie_x,50)
 # Création d'un widget Label (score)
 Label1 = Label(mw,textvariable = score)
 Label1.pack(side = 'bottom', padx = 5, pady = 5)
