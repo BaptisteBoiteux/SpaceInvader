@@ -10,9 +10,18 @@ repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
 import SpaceFonction as f
 from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, PhotoImage,filedialog, Menu
 
-class vaisseau:
-    def __init__(self):
-        self.Zone_jeux.create
+
+
+class Vaisseau():
+    def __init__(self,master):
+        self.master = master
+        self.img = PhotoImage(file="Image/Logo_RogerVoyage1.png")
+        self.vaisseaux = self.master.create_image(260, 280,image=self.img)
+
+    def droite(self):
+        self.master.move(self.vaisseaux,10,0)
+    def gauche(self):
+        self.master.move(self.vaisseaux,-10,0)
 
 # création de la fenêtre graphique
 mw = Tk()
@@ -41,5 +50,11 @@ menuaide.add_command(label = "A propos",command = f.Apropos)
 menubar.add_cascade(label = "Aide", menu = menuaide)
 # Affichage du menu
 mw.config(menu = menubar)
+#vaisseaux
+roger = Vaisseau(Zone_jeux)
+#detection des input
+mw.bind('<Right>', lambda _:roger.droite())
+mw.bind('<Left>', lambda _:roger.gauche())
+
 #lancement du gestionnaire d'événements
 mw.mainloop()
