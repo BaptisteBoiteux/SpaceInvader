@@ -17,7 +17,7 @@ class Vaisseau():
     def __init__(self,master):
         self.master = master
         self.img = PhotoImage(file="Image/Logo_RogerVoyage1.png")
-        self.vaisseaux = self.master.create_image(260, 280,image=self.img)
+        self.vaisseaux = self.master.create_image(240, 280,image=self.img)
         self.x0 = 220
         self.x1 = 260
         self.y1 = 302
