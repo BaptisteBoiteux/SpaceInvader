@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO : voir bug debut deplacement et acceleration bouton commencer
+TODO : voir bug debut deplacement et acceleration bouton commencer, regler disparition du vaisseau sur les bords
 """
 
 #Importation des bibilothèques
@@ -31,9 +31,17 @@ class Alien():
 alien0 = Alien(60,20)
 largeur_mw = 480
 hauteur_mw = 320
-x = 20
+x = 30
 moitie_x = alien0.largeur/2
 dx = 2
+play = False
+
+def Commencer():
+    global play
+    if not play :
+        deplacement_alien()
+    play = True
+
 
 def deplacement_alien():
     """ Deplacement de l'alien"""
@@ -48,6 +56,7 @@ def deplacement_alien():
         x = 2*moitie_x-x
         dx = -dx
     x = x+dx
+    print(x)
     # affichage
     Zone_jeux.coords(alien,x-moitie_x,10,x+moitie_x,50)
     # mise à jour toutes les 200ms
@@ -68,7 +77,7 @@ Label1.pack(side = 'bottom', padx = 5, pady = 5)
 # Création d'un widget Button (bouton Quitter)
 Button(mw, text ='Quitter' ,command = mw.destroy).pack(side='bottom',padx=5,pady=5)
 # Création d'un widget Button (bouton Commencer)
-Button(mw, text ='Commencer', command = deplacement_alien ).pack(side='bottom',padx=5,pady=5)
+Button(mw, text ='Commencer', command = Commencer).pack(side='bottom',padx=5,pady=5)
 # Création d'un widget Menu
 menubar = Menu(mw)
 menuoptions = Menu(menubar,tearoff = 0)
