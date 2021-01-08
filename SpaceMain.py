@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO : voir bug debut deplacement et acceleration bouton commencer, regler disparition du vaisseau sur les bords
+TODO :
 """
 
 #Importation des bibilothèques
@@ -32,56 +32,45 @@ class Vaisseau():
             self.master.move(self.vaisseaux,-10,0)
             self.x1 = self.x1 - 10
             self.x0 = self.x0 - 10  
-class Alien():
-    def __init__(self,largeur,hauteur,x,y):
-        self.largeur = largeur
-        self.hauteur = hauteur
-        self.x = x
-        self.y = y
-        self.rebond = 0
-        self.detruit = False
 
-alien0 = Alien(60,20,30,30)
+
+alien0 = f.Alien(60,20,30,30)
+alien1 = f.Alien(60,20,50,30)
 largeur_mw = 480
 hauteur_mw = 320
-x = alien0.x
-y = alien0.y
-moitie_x = alien0.largeur/2
-moitie_y = alien0.hauteur/2
-dx = 5
 play = False
-rebond = alien0.rebond
 
 def Commencer():
     """Commande qui se lance a l'appui du bouton commencer"""
     global play
     if not play :
-        deplacement_alien()
+        deplacement_alien(alien0)
     play = True
 
 
-def deplacement_alien():
+def deplacement_alien(alien):
     """ Deplacement de l'alien"""
-    global x,dx,y,rebond
+    moitie_x = alien.largeur/2
+    moitie_y = alien.hauteur/2
     # rebond à droite
-    if x+moitie_x+ dx > largeur_mw:
-        x = 2*(largeur_mw-moitie_x)-x
-        dx = -dx
-        rebond += 1
+    if alien.x+moitie_x+ alien.dx > largeur_mw:
+        alien.x = 2*(largeur_mw-moitie_x)-alien.x
+        alien.dx = -alien.dx
+        alien.rebond += 1
     # rebond à gauche
-    if x-moitie_x+dx < 0:
-        x = 2*moitie_x-x
-        dx = -dx
-        rebond +=1
-    x = x+dx
+    if alien.x-moitie_x+ alien.dx < 0:
+        alien.x = 2*moitie_x-alien.x
+        alien.dx = -alien.dx
+        alien.rebond +=1
+    alien.x += alien.dx
     #descente de l'alien
-    if rebond == 2:
-        y = y + 10
-        rebond = 0
+    if alien.rebond == 2:
+        alien.y += 10
+        alien.rebond = 0
     # affichage
-    Zone_jeux.coords(alien,x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
-    # mise à jour toutes les 200ms
-    mw.after(50,deplacement_alien)
+    Zone_jeux.coords(alien_rec,alien.x-moitie_x,alien.y-moitie_y,alien.x+moitie_x,alien.y+moitie_y)
+    # mise à jour toutes les 50ms
+    mw.after(50,lambda:deplacement_alien(alien))
 
 # création de la fenêtre graphique
 mw = Tk()
@@ -91,7 +80,8 @@ mw.title('Bretons Invader')
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
-alien = Zone_jeux.create_rectangle(x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
+alien_rec = Zone_jeux.create_rectangle(alien0.x-alien0.largeur/2,alien0.y-alien0.hauteur/2,alien0.x+alien0.largeur/2,alien0.y+alien0.hauteur/2)
+#alien1 = Zone_jeux.create_rectangle(alien1.x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
 # Création d'un widget Label (score)
 Label1 = Label(mw,textvariable = score)
 Label1.pack(side = 'bottom', padx = 5, pady = 5)

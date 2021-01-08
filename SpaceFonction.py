@@ -15,3 +15,13 @@ def Debut():
 
 def Apropos():
     messagebox.showinfo("A Propos","Ce jeu à été créer par Julien Mercier et Baptiste Boiteux\nIl s'inspire du jeux Space Invader conçu par Tomohiro Nishikado en 1978")
+
+class Alien():
+    def __init__(self,largeur,hauteur,x,y):
+        self.largeur = largeur
+        self.hauteur = hauteur
+        self.x = x
+        self.y = y
+        self.rebond = 0
+        self.dx = 5
+        self.detruit = False
