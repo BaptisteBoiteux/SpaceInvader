@@ -38,6 +38,7 @@ class Alien():
         self.hauteur = hauteur
         self.x = x
         self.y = y
+        self.rebond = 0
         self.detruit = False
 
 alien0 = Alien(60,20,30,30)
@@ -47,10 +48,12 @@ x = alien0.x
 y = alien0.y
 moitie_x = alien0.largeur/2
 moitie_y = alien0.hauteur/2
-dx = 2
+dx = 5
 play = False
+rebond = alien0.rebond
 
 def Commencer():
+    """Commande qui se lance a l'appui du bouton commencer"""
     global play
     if not play :
         deplacement_alien()
@@ -59,16 +62,22 @@ def Commencer():
 
 def deplacement_alien():
     """ Deplacement de l'alien"""
-    global x,dx,largeur_mw,hauteur_mw
+    global x,dx,y,rebond
     # rebond à droite
     if x+moitie_x+ dx > largeur_mw:
         x = 2*(largeur_mw-moitie_x)-x
-        dx = -dx  
+        dx = -dx
+        rebond += 1
     # rebond à gauche
     if x-moitie_x+dx < 0:
         x = 2*moitie_x-x
         dx = -dx
+        rebond +=1
     x = x+dx
+    #descente de l'alien
+    if rebond == 2:
+        y = y + 10
+        rebond = 0
     # affichage
     Zone_jeux.coords(alien,x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
     # mise à jour toutes les 200ms
