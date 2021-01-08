@@ -18,11 +18,20 @@ class Vaisseau():
         self.master = master
         self.img = PhotoImage(file="Image/Logo_RogerVoyage1.png")
         self.vaisseaux = self.master.create_image(260, 280,image=self.img)
-
+        self.x0 = 220
+        self.x1 = 260
+        self.y1 = 302
+        self.y0 = 258
     def droite(self):
-        self.master.move(self.vaisseaux,10,0)
+        if (self.x1 <= 470):
+            self.master.move(self.vaisseaux,10,0)
+            self.x1 = self.x1 + 10
+            self.x0 = self.x0 + 10  
     def gauche(self):
-        self.master.move(self.vaisseaux,-10,0)
+        if (self.x0 >= 10):
+            self.master.move(self.vaisseaux,-10,0)
+            self.x1 = self.x1 - 10
+            self.x0 = self.x0 - 10  
 class Alien():
     def __init__(self,largeur,hauteur):
         self.largeur = largeur
