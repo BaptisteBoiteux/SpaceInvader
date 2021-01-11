@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO :
+TODO : Avoir une seule fonction garphique qui met à jour ici et mettre les classes et les fonxtions logiques dans le SpaceFonction
 """
 
 #Importation des bibilothèques
@@ -28,9 +28,10 @@ from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, Phot
 
 
 
-alien0 = f.Alien(60,20,30,30)
-alien1 = f.Alien(60,20,50,30)
+alien0 = f.Alien(0,60,20,20)
+alien1 = f.Alien(80,60,20,20)
 roger = f.Vaisseau()
+
 largeur_mw = 480
 hauteur_mw = 320
 play = False
@@ -52,11 +53,13 @@ def droite():
         roger.droite()
         Zone_jeux.move(roger_vaisseau,10,0)
 
+
 def gauche():
     if (roger.x0 >= 10):
         print("gauche")
         roger.gauche()
         Zone_jeux.move(roger_vaisseau,-10,0)
+
 
 # def deplacement_alien(alien):
 #     """Deplacement de l'alien"""
@@ -90,9 +93,11 @@ mw.title('Bretons Invader')
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
-alien_rec = Zone_jeux.create_rectangle(alien0.x-alien0.largeur/2,alien0.y-alien0.hauteur/2,alien0.x+alien0.largeur/2,alien0.y+alien0.hauteur/2)
+
+alien_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
 img_vaisseau = PhotoImage(file='Image/Logo_RogerVoyage1.png')
 roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)
+
 #alien1 = Zone_jeux.create_rectangle(alien1.x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
 # Création d'un widget Label (score)
 Label1 = Label(mw,textvariable = score)
