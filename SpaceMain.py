@@ -42,35 +42,11 @@ play = False
 
 def Commencer():
     """Commande qui se lance a l'appui du bouton commencer"""
-    global play
-    if not play :
-        deplacement_alien(alien0)
-    play = True
-
-
-def deplacement_alien(alien):
-    """ Deplacement de l'alien"""
-    # rebond à droite
-    if alien.x1 + alien.dx > largeur_mw:
-        alien.x0 = largeur_mw-alien0.largeur
-        alien.dx = -alien.dx
-        alien.rebond += 1
-    # rebond à gauche
-    if alien.x0 + alien.dx < 0:
-        alien.x0 = 0
-        alien.dx = -alien.dx
-        alien.rebond +=1
-    alien.x0 += alien.dx
-    alien.x1 = alien.x0 + alien0.largeur
-    #descente de l'alien
-    if alien.rebond == 2:
-        alien.y0 += 10
-        alien.y1 = alien.y0 + alien0.hauteur
-        alien.rebond = 0
+    alien0.deplacement()
     # affichage
-    Zone_jeux.coords(alien_rec,alien.x0,alien.y0,alien.x1,alien.y1)
+    Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)
     # mise à jour toutes les 50ms
-    mw.after(50,lambda:deplacement_alien(alien))
+    mw.after(50,lambda:alien0.deplacement())
 
 # création de la fenêtre graphique
 mw = Tk()
@@ -80,7 +56,7 @@ mw.title('Bretons Invader')
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
-alien_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
+alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
 #alien1 = Zone_jeux.create_rectangle(alien1.x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
 # Création d'un widget Label (score)
 Label1 = Label(mw,textvariable = score)

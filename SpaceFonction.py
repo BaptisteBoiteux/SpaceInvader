@@ -27,3 +27,23 @@ class Alien():
         self.rebond = 0
         self.dx = 5
         self.detruit = False
+    def deplacement(self):
+        """ Deplacement de l'alien"""
+        largeur_mw = 480
+        # rebond à droite
+        if self.x1 + self.dx > largeur_mw:
+            self.x0 = largeur_mw-self.largeur
+            self.dx = -self.dx
+            self.rebond += 1
+        # rebond à gauche
+        if self.x0 + self.dx < 0:
+            self.x0 = 0
+            self.dx = -self.dx
+            self.rebond +=1
+        self.x0 += self.dx
+        self.x1 = self.x0 + self.largeur
+        #descente de l'alien
+        if self.rebond == 2:
+            self.y0 += 10
+            self.y1 = self.y0 + self.hauteur
+            self.rebond = 0
