@@ -44,19 +44,16 @@ def Commencer():
     play = True
 
 def bigloop (roger): 
-    print(roger.x,roger.y)
     mw.after(50,lambda:bigloop(roger))
 
 def droite():
     if (roger.x1 <= 470):
-        print("droite")
         roger.droite()
         Zone_jeux.move(roger_vaisseau,10,0)
 
 
 def gauche():
     if (roger.x0 >= 10):
-        print("gauche")
         roger.gauche()
         Zone_jeux.move(roger_vaisseau,-10,0)
 
