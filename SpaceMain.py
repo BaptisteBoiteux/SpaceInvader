@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO :
+TODO : Avoir une seule fonction garphique qui met à jour ici et mettre les classes et les fonxtions logiques dans le SpaceFonction
 """
 
 #Importation des bibilothèques
@@ -34,8 +34,8 @@ class Vaisseau():
             self.x0 = self.x0 - 10  
 
 
-alien0 = f.Alien(60,20,30,30)
-alien1 = f.Alien(60,20,50,30)
+alien0 = f.Alien(0,60,20,20)
+alien1 = f.Alien(80,60,20,20)
 largeur_mw = 480
 hauteur_mw = 320
 play = False
@@ -50,25 +50,25 @@ def Commencer():
 
 def deplacement_alien(alien):
     """ Deplacement de l'alien"""
-    moitie_x = alien.largeur/2
-    moitie_y = alien.hauteur/2
     # rebond à droite
-    if alien.x+moitie_x+ alien.dx > largeur_mw:
-        alien.x = 2*(largeur_mw-moitie_x)-alien.x
+    if alien.x1 + alien.dx > largeur_mw:
+        alien.x0 = largeur_mw-alien0.largeur
         alien.dx = -alien.dx
         alien.rebond += 1
     # rebond à gauche
-    if alien.x-moitie_x+ alien.dx < 0:
-        alien.x = 2*moitie_x-alien.x
+    if alien.x0 + alien.dx < 0:
+        alien.x0 = 0
         alien.dx = -alien.dx
         alien.rebond +=1
-    alien.x += alien.dx
+    alien.x0 += alien.dx
+    alien.x1 = alien.x0 + alien0.largeur
     #descente de l'alien
     if alien.rebond == 2:
-        alien.y += 10
+        alien.y0 += 10
+        alien.y1 = alien.y0 + alien0.hauteur
         alien.rebond = 0
     # affichage
-    Zone_jeux.coords(alien_rec,alien.x-moitie_x,alien.y-moitie_y,alien.x+moitie_x,alien.y+moitie_y)
+    Zone_jeux.coords(alien_rec,alien.x0,alien.y0,alien.x1,alien.y1)
     # mise à jour toutes les 50ms
     mw.after(50,lambda:deplacement_alien(alien))
 
@@ -80,7 +80,7 @@ mw.title('Bretons Invader')
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
-alien_rec = Zone_jeux.create_rectangle(alien0.x-alien0.largeur/2,alien0.y-alien0.hauteur/2,alien0.x+alien0.largeur/2,alien0.y+alien0.hauteur/2)
+alien_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
 #alien1 = Zone_jeux.create_rectangle(alien1.x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
 # Création d'un widget Label (score)
 Label1 = Label(mw,textvariable = score)
