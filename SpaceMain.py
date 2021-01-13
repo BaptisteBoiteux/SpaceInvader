@@ -27,31 +27,34 @@ from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, Phot
 #    Toutes les 50ms, rappeler bigLoop()
 
 
-
+#création des différentes entitées de chaques classes
 alien0 = f.Alien(0,60,20)
 alien1 = f.Alien(80,60,20)
 alien2 = f.Alien(160,60,20)
 roger = f.Vaisseau()
 
+#variables globales utilisées dans tout le programme 
 largeur_mw = 480
 hauteur_mw = 320
 play = False
 
 def Commencer():
-    """Commande qui se lance a l'appui du bouton commencer"""
+    """Lancement de la boucle de jeu"""
     global play
-    if not play :
+    if not play : #on detecte si le jeu à déjà été lancé 
         bigloop()
-    play = True
+    play = True #on stocke le fait que le jeu ai été lancé
 
 def bigloop ():
+    #déplacement des différents alien :
     alien0.deplacement()
     alien1.deplacement()
     alien2.deplacement()
+    #Changements des coordonnées
     Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)
     Zone_jeux.coords(alien1_rec,alien1.x0,alien1.y0,alien1.x1,alien1.y1)
     Zone_jeux.coords(alien2_rec,alien2.x0,alien2.y0,alien2.x1,alien2.y1)
-    mw.after(25,lambda:bigloop())
+    mw.after(50,lambda:bigloop()) #mise à jour toutes les 50 ms
 
 def droite():
     if (roger.x1 <= 470):
@@ -71,23 +74,28 @@ mw = Tk()
 score = StringVar()
 score.set("score:0")
 mw.title('Bretons Invader')
+
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
+
+#Initialisationdes éléments graphiques
 alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
 alien1_rec = Zone_jeux.create_rectangle(alien1.x0,alien1.y0,alien1.x1,alien1.y1)
 alien2_rec = Zone_jeux.create_rectangle(alien2.x0,alien2.y0,alien2.x1,alien2.y1)
 img_vaisseau = PhotoImage(file='Image/Logo_RogerVoyage1.png')
 roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)
 
-#alien1 = Zone_jeux.create_rectangle(alien1.x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
 # Création d'un widget Label (score)
 Label1 = Label(mw,textvariable = score)
 Label1.pack(side = 'bottom', padx = 5, pady = 5)
+
 # Création d'un widget Button (bouton Quitter)
 Button(mw, text ='Quitter' ,command = mw.destroy).pack(side='bottom',padx=5,pady=5)
+
 # Création d'un widget Button (bouton Commencer)
 Button(mw, text ='Commencer', command = Commencer).pack(side='bottom',padx=5,pady=5)
+
 # Création d'un widget Menu
 menubar = Menu(mw)
 menuoptions = Menu(menubar,tearoff = 0)
