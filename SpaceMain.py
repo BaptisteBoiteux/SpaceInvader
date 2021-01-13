@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO : Avoir une seule fonction garphique qui met à jour ici et mettre les classes et les fonxtions logiques dans le SpaceFonction
+TODO : Bug rebond alien remise à zéro globale
 """
 
 #Importation des bibilothèques
@@ -28,8 +28,9 @@ from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, Phot
 
 
 
-alien0 = f.Alien(0,60,20,20)
-alien1 = f.Alien(80,60,20,20)
+alien0 = f.Alien(0,60,20)
+alien1 = f.Alien(80,60,20)
+alien2 = f.Alien(160,60,20)
 roger = f.Vaisseau()
 
 largeur_mw = 480
@@ -45,8 +46,12 @@ def Commencer():
 
 def bigloop ():
     alien0.deplacement()
+    alien1.deplacement()
+    alien2.deplacement()
     Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)
-    mw.after(50,lambda:bigloop())
+    Zone_jeux.coords(alien1_rec,alien1.x0,alien1.y0,alien1.x1,alien1.y1)
+    Zone_jeux.coords(alien2_rec,alien2.x0,alien2.y0,alien2.x1,alien2.y1)
+    mw.after(25,lambda:bigloop())
 
 def droite():
     if (roger.x1 <= 470):
@@ -70,6 +75,8 @@ mw.title('Bretons Invader')
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
 alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
+alien1_rec = Zone_jeux.create_rectangle(alien1.x0,alien1.y0,alien1.x1,alien1.y1)
+alien2_rec = Zone_jeux.create_rectangle(alien2.x0,alien2.y0,alien2.x1,alien2.y1)
 img_vaisseau = PhotoImage(file='Image/Logo_RogerVoyage1.png')
 roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)
 
