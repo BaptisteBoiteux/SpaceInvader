@@ -50,7 +50,6 @@ class Missile():
     def __init__(self,master,x0,y0,sens):
         self.master = master
         self.sens = sens
-        self.img = PhotoImage(file="Image/tha_le_misille.png")
         if self.sens == 'vaisseau':
             self.x0 = x0
             self.x1 = x0+40

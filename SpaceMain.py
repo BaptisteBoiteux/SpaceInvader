@@ -40,11 +40,11 @@ def Commencer():
     """Commande qui se lance a l'appui du bouton commencer"""
     global play
     if not play :
-        bigloop(roger)
+        bigloop()
     play = True
 
-def bigloop (roger): 
-    mw.after(50,lambda:bigloop(roger))
+def bigloop (): 
+    mw.after(50,lambda:bigloop())
 
 def droite():
     if (roger.x1 <= 470):
@@ -58,29 +58,7 @@ def gauche():
         Zone_jeux.move(roger_vaisseau,-10,0)
 
 
-# def deplacement_alien(alien):
-#     """Deplacement de l'alien"""
-#     moitie_x = alien.largeur/2
-#     moitie_y = alien.hauteur/2
-#     # rebond à droite
-#     if alien.x+moitie_x+ alien.dx > largeur_mw:
-#         alien.x = 2*(largeur_mw-moitie_x)-alien.x
-#         alien.dx = -alien.dx
-#         alien.rebond += 1
-#     # rebond à gauche
-#     if alien.x-moitie_x+ alien.dx < 0:
-#         alien.x = 2*moitie_x-alien.x
-#         alien.dx = -alien.dx
-#         alien.rebond +=1
-#     alien.x += alien.dx
-#     #descente de l'alien
-#     if alien.rebond == 2:
-#         alien.y += 10
-#         alien.rebond = 0
-#     # affichage
-#     Zone_jeux.coords(alien_rec,alien.x-moitie_x,alien.y-moitie_y,alien.x+moitie_x,alien.y+moitie_y)
-#     # mise à jour toutes les 50ms
-#     mw.after(50,lambda:deplacement_alien(alien))
+
     
 # création de la fenêtre graphique
 mw = Tk()
@@ -93,7 +71,6 @@ Zone_jeux.pack(side = 'top',padx =5, pady =5)
 
 alien_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
 img_vaisseau = PhotoImage(file='Image/Logo_RogerVoyage1.png')
-roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)
 
 #alien1 = Zone_jeux.create_rectangle(alien1.x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
 # Création d'un widget Label (score)
@@ -117,8 +94,5 @@ mw.config(menu = menubar)
 mw.bind('<Right>', lambda _:droite())
 mw.bind('<Left>', lambda _:gauche())
 #detection des input
-# mw.bind('<Right>', lambda _:roger.droite())
-# mw.bind('<Left>', lambda _:roger.gauche())
-
 #lancement du gestionnaire d'événements
 mw.mainloop()
