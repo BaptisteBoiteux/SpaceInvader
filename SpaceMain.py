@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO : Avoir une seule fonction garphique qui met à jour ici et mettre les classes et les fonxtions logiques dans le SpaceFonction
+TODO : Bug rebond alien remise à zéro globale
 """
 
 #Importation des bibilothèques
@@ -27,24 +27,39 @@ from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, Phot
 #    Toutes les 50ms, rappeler bigLoop()
 
 
-
-alien0 = f.Alien(0,60,20,20)
-alien1 = f.Alien(80,60,20,20)
+#création des différentes entitées de chaques classes
+alien0 = f.Alien(0,60,20)
+alien1 = f.Alien(80,60,20)
+alien2 = f.Alien(160,60,20)
 roger = f.Vaisseau()
+missile = [False,False]
+missile_graph = [0,0]
 
+#variables globales utilisées dans tout le programme 
 largeur_mw = 480
 hauteur_mw = 320
 play = False
 
 def Commencer():
-    """Commande qui se lance a l'appui du bouton commencer"""
+    """Lancement de la boucle de jeu"""
     global play
-    if not play :
-        bigloop()
-    play = True
 
-def bigloop (): 
-    mw.after(50,lambda:bigloop())
+    if not play : #on detecte si le jeu à déjà été lancé 
+        bigloop()
+    play = True #on stocke le fait que le jeu ai été lancé
+
+def bigloop ():
+    #déplacement des différents alien :
+    alien0.deplacement()
+    alien1.deplacement()
+    alien2.deplacement()
+    deplacement_missile()
+    #Changements des coordonnées
+    Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)
+    Zone_jeux.coords(alien1_rec,alien1.x0,alien1.y0,alien1.x1,alien1.y1)
+    Zone_jeux.coords(alien2_rec,alien2.x0,alien2.y0,alien2.x1,alien2.y1)
+    mw.after(50,lambda:bigloop()) #mise à jour toutes les 50 ms
+
 
 def droite():
     if (roger.x1 <= 470):
@@ -57,6 +72,24 @@ def gauche():
         roger.gauche()
         Zone_jeux.move(roger_vaisseau,-10,0)
 
+def tirer():
+    if missile[0] == False:
+        missile[0] = f.Missile(roger.x0,roger.y0,'vaisseau')
+        missile_graph[0] = Zone_jeux.create_image(missile[0].x,missile[0].y,image= img_missile)
+
+
+def deplacement_missile():
+    cpt=0
+    while cpt < len(missile):
+        if missile[cpt] != False:
+            if missile[cpt].y0 <=10:
+                Zone_jeux.delete(missile_graph[cpt])
+                missile[cpt] = False
+            else:
+                missile[cpt].deplacement_missile()
+                Zone_jeux.move(missile_graph[cpt],0,missile[cpt].dy)
+        cpt = cpt+1
+
 
 
     
@@ -65,21 +98,29 @@ mw = Tk()
 score = StringVar()
 score.set("score:0")
 mw.title('Bretons Invader')
+
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
 
-alien_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
+#Initialisationdes éléments graphiques
+alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
+alien1_rec = Zone_jeux.create_rectangle(alien1.x0,alien1.y0,alien1.x1,alien1.y1)
+alien2_rec = Zone_jeux.create_rectangle(alien2.x0,alien2.y0,alien2.x1,alien2.y1)
 img_vaisseau = PhotoImage(file='Image/Logo_RogerVoyage1.png')
+img_missile = PhotoImage(file='Image/tha_le_misille.png')
+roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)
 
-#alien1 = Zone_jeux.create_rectangle(alien1.x-moitie_x,y-moitie_y,x+moitie_x,y+moitie_y)
 # Création d'un widget Label (score)
 Label1 = Label(mw,textvariable = score)
 Label1.pack(side = 'bottom', padx = 5, pady = 5)
+
 # Création d'un widget Button (bouton Quitter)
 Button(mw, text ='Quitter' ,command = mw.destroy).pack(side='bottom',padx=5,pady=5)
+
 # Création d'un widget Button (bouton Commencer)
 Button(mw, text ='Commencer', command = Commencer).pack(side='bottom',padx=5,pady=5)
+
 # Création d'un widget Menu
 menubar = Menu(mw)
 menuoptions = Menu(menubar,tearoff = 0)
@@ -93,6 +134,7 @@ mw.config(menu = menubar)
 #vaisseaux
 mw.bind('<Right>', lambda _:droite())
 mw.bind('<Left>', lambda _:gauche())
+mw.bind('<space>', lambda _:tirer())
 #detection des input
 #lancement du gestionnaire d'événements
 mw.mainloop()
