@@ -18,8 +18,8 @@ def Apropos():
 
 class Alien():
     #Les variables ci-dessous seeont valables pour tous les Alien
-    dx = 2 #déplacement horizontale
-    dy = 10 #déplacement vertical 
+    dx = 10 #déplacement horizontale
+    dy = 50 #déplacement vertical 
     rebond = 0 #nombres de rebond effectué en tout par le Alien
     y0 = 20 #position verticale des Aliens, elle est général car doit changer en même temps pour tous les Alien
 
@@ -32,7 +32,6 @@ class Alien():
         self.hauteur = hauteur
         self.y1 = Alien.y0 + hauteur
         self.detruit = False
-
     def deplacement(self):
         """ Deplacement de l'alien"""
         largeur_mw = 480 #on rapelle ici la largeur de la fenêtre tkinter
@@ -55,7 +54,6 @@ class Alien():
         self.x1 = self.x0 + self.largeur
         self.y0 = Alien.y0
         self.y1 = self.y0 + self.hauteur
-            
 
 class Vaisseau():
     def __init__(self):
@@ -65,6 +63,7 @@ class Vaisseau():
         self.y  = 280
         self.y1 = 302
         self.y0 = 258
+        self.detruit = False
     def droite(self):
         self.x = self.x + 10
         self.x1 = self.x1 + 10
@@ -80,6 +79,7 @@ class Missile():
         self.master = master
         self.sens = sens
         self.img = PhotoImage(file="Image/tha_le_misille.png")
+        self.detruit = False
         if self.sens == 'vaisseau':
             self.x0 = x0
             self.x1 = x0+40
@@ -99,3 +99,9 @@ class Missile():
                     self.x1 = self.y1 - 10
                     self.x0 = self.y0 - 10  
                     self.master.after(1000,self.deplacement_missile())
+
+def collision(objet1,objet2) :
+    if objet1.y1 >= objet2.y0:
+        objet1.detruit = True
+        objet2.detruit = True
+

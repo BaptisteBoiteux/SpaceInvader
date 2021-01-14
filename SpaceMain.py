@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO : Bug rebond alien remise à zéro globale
+TODO :
 """
 
 #Importation des bibilothèques
@@ -32,7 +32,6 @@ alien0 = f.Alien(0,60,20)
 alien1 = f.Alien(80,60,20)
 alien2 = f.Alien(160,60,20)
 roger = f.Vaisseau()
-
 #variables globales utilisées dans tout le programme 
 largeur_mw = 480
 hauteur_mw = 320
@@ -46,15 +45,33 @@ def Commencer():
     play = True #on stocke le fait que le jeu ai été lancé
 
 def bigloop ():
+    f.collision(alien0,roger)
+    f.collision(alien1,roger)
+    f.collision(alien2,roger)
     #déplacement des différents alien :
-    alien0.deplacement()
-    alien1.deplacement()
-    alien2.deplacement()
-    #Changements des coordonnées
-    Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)
-    Zone_jeux.coords(alien1_rec,alien1.x0,alien1.y0,alien1.x1,alien1.y1)
-    Zone_jeux.coords(alien2_rec,alien2.x0,alien2.y0,alien2.x1,alien2.y1)
-    mw.after(50,lambda:bigloop()) #mise à jour toutes les 50 ms
+    if not roger.detruit :
+        if not alien0.detruit: 
+            alien0.deplacement()
+            Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
+        else :
+            Zone_jeux.delete(alien0_rec)
+        if not alien1.detruit: 
+            alien1.deplacement()
+            Zone_jeux.coords(alien1_rec,alien1.x0,alien1.y0,alien1.x1,alien1.y1)
+        else :
+            Zone_jeux.delete(alien1_rec)
+        if not alien2.detruit: 
+            alien2.deplacement()
+            Zone_jeux.coords(alien2_rec,alien2.x0,alien2.y0,alien2.x1,alien2.y1)
+        else :
+            Zone_jeux.delete(alien2_rec)
+        mw.after(50,lambda:bigloop()) #mise à jour toutes les 50 ms
+    else:
+        messagebox.showinfo("GAME OVER","Vous avez perdu")
+
+
+
+
 
 def droite():
     if (roger.x1 <= 470):
