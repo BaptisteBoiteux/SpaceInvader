@@ -75,10 +75,8 @@ class Vaisseau():
 
 
 class Missile():
-    def __init__(self,master,x0,y0,sens):
-        self.master = master
+    def __init__(self,x0,y0,sens):
         self.sens = sens
-        self.img = PhotoImage(file="Image/tha_le_misille.png")
         self.vie = 3
         self.detruit = False
         if self.sens == 'vaisseau':
@@ -86,20 +84,27 @@ class Missile():
             self.x1 = x0+40
             self.y0 = y0-40
             self.y1 = y0
-            self.misille = self.master.create_image(self.x1-20,self.y1-20,image = self.img)
+            self.x  = x0+20
+            self.y  = y0-20
+            self.dy   = -2
         if self.sens == 'alien':
             self.x0 = x0+20
-            self.x1 = x0+40
+            self.x1 = x0+60
             self.y0 = y0+40
-            self.y1 = y0
-            self.misille = self.master.create_image(self.x1-20,self.y1-20,image = self.img)
+            self.y1 = y0+80
+            self.x  = x0+20
+            self.y  = y0-20
+            self.dy   = 2
     def deplacement_missile(self):
             if self.sens == 'vaisseau':
-                if self.x0 > 10:
-                    self.master.move(self.misille,0,-10)
-                    self.x1 = self.y1 - 10
-                    self.x0 = self.y0 - 10  
-                    self.master.after(1000,self.deplacement_missile())
+                self.y1 = self.y1 + self.dy 
+                self.y0 = self.y0 + self.dy 
+                self.y  = self.y0 + self.dy 
+            if self.sens == 'alien':
+                self.y1 = self.y1 + self.dy 
+                self.y0 = self.y0 + self.dy 
+                self.y  = self.y0 + self.dy 
+
 
 class Abri :
      def __init__(self,x0,y0):
