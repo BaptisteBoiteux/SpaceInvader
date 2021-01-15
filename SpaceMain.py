@@ -84,7 +84,7 @@ def alien_missile():
 
 def tirer():
     if missile[0] == False:
-        missile[0] = f.Missile(roger.x0,roger.y0,'vaisseau')
+        missile[0] = f.Missile(roger.x0,roger.y0,'vaisseau',roger.largeur,roger.hauteur)
         missile_graph[0] = Zone_jeux.create_image(missile[0].x,missile[0].y,image= img_missile)
 
 def deplacement_missile():

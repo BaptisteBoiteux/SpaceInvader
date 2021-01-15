@@ -60,19 +60,23 @@ class Vaisseau():
         """Initialisation de vaisseau"""
         self.x  = 240 # permet de determiner le x afin permettant d'afficher le vaisseau
         self.y  = 280 # permet de determiner le y afin permettant d'afficher le vaisseau
+        self.largeur = 40
+        self.hauteur = 44
+        self.dx= 10
+        # permet de d'initialiser les coordonées du vaisseux
         self.x0 = 220
         self.x1 = 260
         self.y1 = 302
         self.y0 = 258
         self.detruit = False
     def droite(self):
-        self.x = self.x + 10
-        self.x1 = self.x1 + 10
-        self.x0 = self.x0 + 10  
+        self.x = self.x   + self.dx
+        self.x1 = self.x1 + self.dx
+        self.x0 = self.x0 + self.dx  
     def gauche(self):       
-        self.x  = self.x - 10
-        self.x1 = self.x1 - 10
-        self.x0 = self.x0 - 10  
+        self.x  = self.x  - self.dx
+        self.x1 = self.x1 - self.dx
+        self.x0 = self.x0 - self.dx
 
 
 class Missile():
@@ -83,10 +87,10 @@ class Missile():
         if self.sens == 'vaisseau':
             self.x0 = x
             self.x1 = x+self.largeur
-            self.y0 = y
-            self.y1 = y-self.hauteur
+            self.y0 = y-self.hauteur
+            self.y1 = y
             self.x  = x+(largeur/2)
-            self.y  = y-(hauteur/2)
+            self.y  = y-(self.hauteur/2)
             self.dy = -2
         if self.sens == 'alien':
             self.x0 = x+(largeur/2)-(self.largeur/2)
@@ -110,3 +114,11 @@ def collision(objet1,objet2) :
     if objet1.y1 >= objet2.y0:
         objet1.detruit = True
         objet2.detruit = True
+
+
+def tir_alien(alien):
+    nb_alien_vie=[]
+    for invader in alien:
+        if invader.vie == 0:
+            True
+
