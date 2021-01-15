@@ -8,6 +8,7 @@ repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
 
 #Importation des bibilothèques
 from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, PhotoImage,filedialog, Menu
+import random
 
 
 def Debut():
@@ -59,49 +60,60 @@ class Vaisseau():
         """Initialisation de vaisseau"""
         self.x  = 240 # permet de determiner le x afin permettant d'afficher le vaisseau
         self.y  = 280 # permet de determiner le y afin permettant d'afficher le vaisseau
+        self.largeur = 40
+        self.hauteur = 44
+        self.dx= 10
+        # initialiser les coordonées du vaisseux
         self.x0 = 220
         self.x1 = 260
         self.y1 = 302
         self.y0 = 258
         self.vie = 3
     def droite(self):
-        self.x = self.x + 10
-        self.x1 = self.x1 + 10
-        self.x0 = self.x0 + 10  
+        # mise a jour des coordonées du vaisseux apres un deplacement a droite
+        self.x = self.x   + self.dx
+        self.x1 = self.x1 + self.dx
+        self.x0 = self.x0 + self.dx  
     def gauche(self):       
-        self.x  = self.x - 10
-        self.x1 = self.x1 - 10
-        self.x0 = self.x0 - 10  
+        # mise a jour des coordonées du vaisseux apres un deplacement a gauche
+        self.x  = self.x  - self.dx
+        self.x1 = self.x1 - self.dx
+        self.x0 = self.x0 - self.dx
 
 
 class Missile():
     def __init__(self,x,y,sens,largeur,hauteur):
-        self.sens = sens
+        """Initialisation du missile"""
+        self.sens = sens # fais la difference entre missile alien et vaisseau
+        self.dy = 8 # deplacement du missile
         self.vie = 1
         self.hauteur = 40
         self.largeur = 40
         if self.sens == 'vaisseau':
+            self.x  = x+(largeur/2)# permet de determiner le x afin permettant d'afficher un missile
+            self.y  = y-(self.hauteur/2)# permet de determiner le y afin permettant d'afficher un misile
+            # initialiser les coordonées du missile
             self.x0 = x
             self.x1 = x+self.largeur
-            self.y0 = y
-            self.y1 = y-self.hauteur
-            self.x  = x+(largeur/2)
-            self.y  = y-(hauteur/2)
-            self.dy = -20
+            self.y0 = y-self.hauteur
+            self.y1 = y
+            self.dy = -self.dy # le dy est inverser car le missile monte
         if self.sens == 'alien':
+            self.x  = x+(largeur/2)     # permet de determiner le x afin permettant d'afficher un misile
+            self.y  = y+(self.hauteur/2)# permet de determiner le y afin permettant d'afficher un misile
+            # initialiser les coordonées du missile
             self.x0 = x+(largeur/2)-(self.largeur/2)
             self.x1 = x+(largeur/2)+(self.largeur/2)
             self.y0 = y
             self.y1 = y+self.hauteur
-            self.x  = x+(largeur/2)
-            self.y  = y+(self.hauteur/2)
-            self.dy = 20
     def deplacement_missile(self):
             if self.sens == 'vaisseau':
+                # mise a jour des coordonées du missile apres le deplacement
                 self.y1 = self.y1 + self.dy 
                 self.y0 = self.y0 + self.dy 
                 self.y  = self.y0 + self.dy 
             if self.sens == 'alien':
+                # mise a jour des coordonées du missile apres le deplacement
                 self.y1 = self.y1 + self.dy 
                 self.y0 = self.y0 + self.dy 
                 self.y  = self.y0 + self.dy 
@@ -118,5 +130,14 @@ class Ilot :
         self.vie = 5
 
 
-    
+
+def tir_alien(alien):
+    nb_alien_vie=[]
+    for invader in alien:
+        if invader.vie>0:
+            nb_alien_vie.append(invader)
+    rand = random.randint (0,len(nb_alien_vie)-1)
+    return nb_alien_vie[rand]
+
+
 
