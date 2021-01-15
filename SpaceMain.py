@@ -10,21 +10,9 @@ TODO :
 #Importation des bibilothèques
 import SpaceFonction as f
 from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, PhotoImage,filedialog, Menu
+import random
 
 
-
-#def bigLoop():  #boucle de jeu
-#    instancier ton missile
-#    missile = ...
-#    dessin_missile
-#
-#  vaisseau =
-#   dessin_vaisseau
-#
-#    ennemis =
-#    dessin_ennemisx    
-#    
-#    Toutes les 50ms, rappeler bigLoop()
 #création des différentes entitées de chaques classes
 alien0 = f.Alien(0,60,20)
 alien1 = f.Alien(80,60,20)
@@ -32,6 +20,8 @@ alien2 = f.Alien(160,60,20)
 roger = f.Vaisseau()
 missile = [False,False]
 missile_graph = [0,0]
+nb_alien = 3
+
 #variables globales utilisées dans tout le programme 
 largeur_mw = 480
 hauteur_mw = 320
@@ -48,6 +38,7 @@ def Commencer():
 def bigloop ():
     #déplacement des différents alien :
     if not roger.vie == 0 :
+        alien_missile()
         deplacement_missile()
         if missile[0] != False :
             f.collision(alien0,missile[0])
@@ -72,9 +63,6 @@ def bigloop ():
     else:
         messagebox.showinfo("GAME OVER","Vous avez perdu")
 
-
-
-
 def droite():
     if (roger.x1 <= 470):
         roger.droite()
@@ -85,17 +73,24 @@ def gauche():
     if (roger.x0 >= 10):
         roger.gauche()
         Zone_jeux.move(roger_vaisseau,-10,0)
+
+def alien_missile():
+    alien =[alien0,alien1,alien2]
+    if missile[1] == False:
+        rand = random.randint (0,nb_alien-1)
+        missile[1] = f.Missile(alien[rand].x0,alien[rand].y1,'alien',alien[rand].largeur,alien[rand].hauteur)
+        missile_graph[1] = Zone_jeux.create_image(missile[1].x,missile[1].y,image= img_missile)
+
 def tirer():
     if missile[0] == False:
-        missile[0] = f.Missile(roger.x0,roger.y0,'vaisseau')
+        missile[0] = f.Missile(roger.x0,roger.y0,'vaisseau',0,0)
         missile_graph[0] = Zone_jeux.create_image(missile[0].x,missile[0].y,image= img_missile)
-
 
 def deplacement_missile():
     cpt=0
     while cpt < len(missile):
         if missile[cpt] != False:
-            if missile[cpt].y0 <=10:
+            if missile[cpt].y0 <=10 or missile[cpt].y1 >=310:
                 Zone_jeux.delete(missile_graph[cpt])
                 missile[cpt] = False
             else:
@@ -104,6 +99,7 @@ def deplacement_missile():
         cpt = cpt+1
 
     
+
 # création de la fenêtre graphique
 mw = Tk()
 score = StringVar()
@@ -146,6 +142,7 @@ mw.config(menu = menubar)
 mw.bind('<Right>', lambda _:droite())
 mw.bind('<Left>', lambda _:gauche())
 mw.bind('<space>', lambda _:tirer())
+
 #detection des input
 #lancement du gestionnaire d'événements
 mw.mainloop()
