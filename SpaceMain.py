@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO :
+TODO : Zones_jeux.find_overlaping
 """
 
 #Importation des bibilothèques
@@ -21,6 +21,8 @@ roger = f.Vaisseau()
 missile = [False,False]
 missile_graph = [0,0]
 nb_alien = 3
+score = 0
+vie = 3
 
 #variables globales utilisées dans tout le programme 
 largeur_mw = 480
@@ -40,10 +42,12 @@ def bigloop ():
     if not roger.vie == 0 :
         alien_missile()
         deplacement_missile()
-        if missile[0] != False :
-            f.collision(alien0,missile[0])
-            f.collision(alien1,missile[0])
-            f.collision(alien2,missile[0])
+        if missile[0] != False:
+            collision(alien0)
+            collision(alien1)
+            collision(alien2)
+        if missile[1] != False:
+            collision(roger)
         if not alien0.vie == 0: 
             alien0.deplacement()
             Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
@@ -62,6 +66,7 @@ def bigloop ():
         mw.after(50,lambda:bigloop()) #mise à jour toutes les 50 ms
     else:
         messagebox.showinfo("GAME OVER","Vous avez perdu")
+
 
 def droite():
     if (roger.x1 <= 470):
@@ -98,12 +103,19 @@ def deplacement_missile():
                 Zone_jeux.move(missile_graph[cpt],0,missile[cpt].dy)
         cpt = cpt+1
 
+def collision(objet) :
+    chevauchement = Zone_jeux.find_overlapping(objet.x0, objet.y0, objet.x1, objet.y1)
+    if len(chevauchement) > 1:
+        objet.vie -= 1
+
     
 
 # création de la fenêtre graphique
 mw = Tk()
-score = StringVar()
-score.set("score:0")
+score_aff = StringVar()
+score_aff.set("score:0")
+vie_aff = StringVar()
+vie_aff.set("vie:0")
 mw.title('Bretons Invader')
 
 # Création d'un widget Canvas (zone graphique)
@@ -119,8 +131,11 @@ img_missile = PhotoImage(file='Image/tha_le_misille.png')
 roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)
 
 # Création d'un widget Label (score)
-Label1 = Label(mw,textvariable = score)
-Label1.pack(side = 'bottom', padx = 5, pady = 5)
+Label1 = Label(mw,textvariable = score_aff)
+Label1.pack(side = 'right', padx = 5, pady = 5)
+# Création d'un widget Label (vie)
+Label1 = Label(mw,textvariable = vie_aff)
+Label1.pack(side = 'right', padx = 5, pady = 5)
 
 # Création d'un widget Button (bouton Quitter)
 Button(mw, text ='Quitter' ,command = mw.destroy).pack(side='bottom',padx=5,pady=5)

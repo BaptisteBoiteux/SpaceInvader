@@ -87,7 +87,7 @@ class Missile():
             self.y1 = y-self.hauteur
             self.x  = x+(largeur/2)
             self.y  = y-(hauteur/2)
-            self.dy = -2
+            self.dy = -20
         if self.sens == 'alien':
             self.x0 = x+(largeur/2)-(self.largeur/2)
             self.x1 = x+(largeur/2)+(self.largeur/2)
@@ -95,7 +95,7 @@ class Missile():
             self.y1 = y+self.hauteur
             self.x  = x+(largeur/2)
             self.y  = y+(self.hauteur/2)
-            self.dy = 2
+            self.dy = 20
     def deplacement_missile(self):
             if self.sens == 'vaisseau':
                 self.y1 = self.y1 + self.dy 
@@ -117,16 +117,6 @@ class Ilot :
         self.y1 = self.y0 + self.hauteur
         self.vie = 5
 
-def collision(objet1,objet2) :
-    recouvrement_x = False
-    recouvrement_y = False
-    collision = False
-    if (objet1.y1 >= objet2.y0):
-        recouvrement_y = True
-    if (objet1.x0 <= objet2.x1) and (objet2.x0 <= objet1.x1) :
-        recouvrement_x = True
-    collision = recouvrement_y and recouvrement_x 
-    if collision :
-        objet1.vie -= 1
-        objet2.vie -= 1
+
+    
 
