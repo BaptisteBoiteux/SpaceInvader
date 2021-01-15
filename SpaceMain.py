@@ -25,8 +25,6 @@ from tkinter import Tk, Label, Button, Canvas, Entry, StringVar,messagebox, Phot
 #    dessin_ennemisx    
 #    
 #    Toutes les 50ms, rappeler bigLoop()
-
-
 #création des différentes entitées de chaques classes
 alien0 = f.Alien(0,60,20)
 alien1 = f.Alien(80,60,20)
@@ -48,24 +46,24 @@ def Commencer():
     play = True #on stocke le fait que le jeu ai été lancé
 
 def bigloop ():
-    f.collision(alien0,roger)
-    f.collision(alien1,roger)
-    f.collision(alien2,roger)
     #déplacement des différents alien :
-
-    if not roger.detruit :
+    if not roger.vie == 0 :
         deplacement_missile()
-        if not alien0.detruit: 
+        if missile[0] != False :
+            f.collision(alien0,missile[0])
+            f.collision(alien1,missile[0])
+            f.collision(alien2,missile[0])
+        if not alien0.vie == 0: 
             alien0.deplacement()
             Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
         else :
             Zone_jeux.delete(alien0_rec)
-        if not alien1.detruit: 
+        if not alien1.vie == 0: 
             alien1.deplacement()
             Zone_jeux.coords(alien1_rec,alien1.x0,alien1.y0,alien1.x1,alien1.y1)
         else :
             Zone_jeux.delete(alien1_rec)
-        if not alien2.detruit: 
+        if not alien2.vie == 0: 
             alien2.deplacement()
             Zone_jeux.coords(alien2_rec,alien2.x0,alien2.y0,alien2.x1,alien2.y1)
         else :

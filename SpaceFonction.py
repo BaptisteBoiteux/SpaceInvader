@@ -22,7 +22,6 @@ class Alien():
     dy = 50 #déplacement vertical 
     rebond = 0 #nombres de rebond effectué en tout par le Alien
     y0 = 20 #position verticale des Aliens, elle est général car doit changer en même temps pour tous les Alien
-
     def __init__(self,x0,largeur,hauteur):
         """Initialisation de l'alien"""
         self.x0 = x0
@@ -31,7 +30,7 @@ class Alien():
         self.y0 = Alien.y0
         self.hauteur = hauteur
         self.y1 = Alien.y0 + hauteur
-        self.detruit = False
+        self.vie = 1
     def deplacement(self):
         """ Deplacement de l'alien"""
         largeur_mw = 480 #on rapelle ici la largeur de la fenêtre tkinter
@@ -63,7 +62,7 @@ class Vaisseau():
         self.y  = 280
         self.y1 = 302
         self.y0 = 258
-        self.detruit = False
+        self.vie = 3
     def droite(self):
         self.x = self.x + 10
         self.x1 = self.x1 + 10
@@ -77,8 +76,7 @@ class Vaisseau():
 class Missile():
     def __init__(self,x0,y0,sens):
         self.sens = sens
-        self.vie = 3
-        self.detruit = False
+        self.vie = 1
         if self.sens == 'vaisseau':
             self.x0 = x0
             self.x1 = x0+40
@@ -106,7 +104,7 @@ class Missile():
                 self.y  = self.y0 + self.dy 
 
 
-class Abri :
+class Ilot :
      def __init__(self,x0,y0):
         self.largeur = 50
         self.hauteur = 10
@@ -117,7 +115,15 @@ class Abri :
         self.vie = 5
 
 def collision(objet1,objet2) :
-    if objet1.y1 >= objet2.y0:
-        objet1.detruit = True
-        objet2.detruit = True
+    recouvrement_x = False
+    recouvrement_y = False
+    collision = False
+    if (objet1.y1 >= objet2.y0):
+        recouvrement_y = True
+    if (objet1.x0 <= objet2.x1) and (objet2.x0 <= objet1.x1) :
+        recouvrement_x == True
+    collision = recouvrement_y and recouvrement_x 
+    if collision :
+        objet1.vie -= 1
+        objet2.vie -= 1
 
