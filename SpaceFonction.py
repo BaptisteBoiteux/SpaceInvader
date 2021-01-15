@@ -79,6 +79,7 @@ class Missile():
         self.master = master
         self.sens = sens
         self.img = PhotoImage(file="Image/tha_le_misille.png")
+        self.vie = 3
         self.detruit = False
         if self.sens == 'vaisseau':
             self.x0 = x0
@@ -99,6 +100,16 @@ class Missile():
                     self.x1 = self.y1 - 10
                     self.x0 = self.y0 - 10  
                     self.master.after(1000,self.deplacement_missile())
+
+class Abri :
+     def __init__(self,x0,y0):
+        self.largeur = 50
+        self.hauteur = 10
+        self.x0 = 220
+        self.x1 = self.x0 + self.largeur
+        self.y0 = 350
+        self.y1 = self.y0 + self.hauteur
+        self.vie = 5
 
 def collision(objet1,objet2) :
     if objet1.y1 >= objet2.y0:
