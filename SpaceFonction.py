@@ -18,8 +18,8 @@ def Apropos():
 
 class Alien():
     #Les variables ci-dessous seeont valables pour tous les Alien
-    dx = 10 #déplacement horizontale
-    dy = 50 #déplacement vertical 
+    dx = 2 #déplacement horizontale
+    dy = 5 #déplacement vertical 
     rebond = 0 #nombres de rebond effectué en tout par le Alien
     y0 = 20 #position verticale des Aliens, elle est général car doit changer en même temps pour tous les Alien
 
@@ -57,10 +57,11 @@ class Alien():
 
 class Vaisseau():
     def __init__(self):
-        self.x  = 240
+        """Initialisation de vaisseau"""
+        self.x  = 240 # permet de determiner le x afin permettant d'afficher le vaisseau
+        self.y  = 280 # permet de determiner le y afin permettant d'afficher le vaisseau
         self.x0 = 220
         self.x1 = 260
-        self.y  = 280
         self.y1 = 302
         self.y0 = 258
         self.detruit = False
@@ -75,24 +76,26 @@ class Vaisseau():
 
 
 class Missile():
-    def __init__(self,x0,y0,sens):
+    def __init__(self,x,y,sens,largeur,hauteur):
         self.sens = sens
+        self.hauteur = 40
+        self.largeur = 40
         if self.sens == 'vaisseau':
-            self.x0 = x0
-            self.x1 = x0+40
-            self.y0 = y0-40
-            self.y1 = y0
-            self.x  = x0+20
-            self.y  = y0-20
-            self.dy   = -2
+            self.x0 = x
+            self.x1 = x+self.largeur
+            self.y0 = y
+            self.y1 = y-self.hauteur
+            self.x  = x+(largeur/2)
+            self.y  = y-(hauteur/2)
+            self.dy = -2
         if self.sens == 'alien':
-            self.x0 = x0+20
-            self.x1 = x0+60
-            self.y0 = y0+40
-            self.y1 = y0+80
-            self.x  = x0+20
-            self.y  = y0-20
-            self.dy   = 2
+            self.x0 = x+(largeur/2)-(self.largeur/2)
+            self.x1 = x+(largeur/2)+(self.largeur/2)
+            self.y0 = y
+            self.y1 = y+self.hauteur
+            self.x  = x+(largeur/2)
+            self.y  = y+(self.hauteur/2)
+            self.dy = 2
     def deplacement_missile(self):
             if self.sens == 'vaisseau':
                 self.y1 = self.y1 + self.dy 
@@ -103,9 +106,7 @@ class Missile():
                 self.y0 = self.y0 + self.dy 
                 self.y  = self.y0 + self.dy 
 
-
 def collision(objet1,objet2) :
     if objet1.y1 >= objet2.y0:
         objet1.detruit = True
         objet2.detruit = True
-
