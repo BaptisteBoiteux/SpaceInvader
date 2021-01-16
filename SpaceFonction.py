@@ -109,8 +109,8 @@ class Missile():
         self.dy = 8 # deplacement du missile
         self.vie = 1
         self.hauteur = 40
-        self.largeur = 40
-        self.hitbox  =5
+        self.largeur = 10
+        self.hitbox  = self.largeur/2
         if self.sens == 'vaisseau':
             self.x  = x+(largeur/2)# permet de determiner le x afin permettant d'afficher un missile
             self.y  = y-(self.hauteur/2)# permet de determiner le y afin permettant d'afficher un misile
