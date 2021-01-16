@@ -120,7 +120,7 @@ class Missile():
 
 
 class Ilot :
-     def __init__(self,x0,y0):
+    def __init__(self,x0,y0):
         self.largeur = 50
         self.vie = 5
         self.hauteur = self.vie*10
@@ -128,6 +128,15 @@ class Ilot :
         self.x1 = self.x0 + self.largeur
         self.y0 = y0
         self.y1 = self.y0 + self.hauteur
+    def touche_vaisseau(self):
+        self.hauteur = self.vie*10
+        self.y1 = self.y0 + self.hauteur
+    def touche_alien(self):
+        self.hauteur = self.vie*10
+        self.y0 += 10
+        self.y1 = self.y0 + self.hauteur
+
+
 
 
 
