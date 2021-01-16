@@ -129,21 +129,6 @@ class Ilot :
         self.y1 = self.y0 + self.hauteur
         self.vie = 5
 
-def collision(objet1,objet2) :
-    recouvrement_x = False
-    recouvrement_y = False
-    collision = False
-    if (objet1.y1 >= objet2.y0):
-        recouvrement_y = True
-    if (objet1.x0 <= objet2.x1) and (objet2.x0 <= objet1.x1) :
-        recouvrement_x = True
-    collision = recouvrement_y and recouvrement_x 
-    if collision :
-        objet1.vie -= 1
-        objet2.vie -= 1
-        return True
-    else:
-        return False
 
 
 def tir_alien(alien):

@@ -4,7 +4,8 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO :
+TODO : Voir nombres de vies vaisseaux
+Remarques : les erreurs sont dû à l'apparition du missile mais n'empèchent pas le bon fonctionement du jeu
 """
 
 #Importation des bibilothèques
@@ -22,6 +23,9 @@ roger = f.Vaisseau()
 missile = [False,False] # variable qui stocke les classe
 missile_graph = [0,0] # variable qui stocke le graphique du missile
 nb_alien = 3
+score = 0
+vie = 3
+
 #variables globales utilisées dans tout le programme 
 largeur_mw = 480
 hauteur_mw = 320
@@ -40,39 +44,55 @@ def Commencer():
     play = True #on stocke le fait que le jeu ai été lancé
 
 def bigloop (alien_mort):
+    global score
+    print(roger.vie)
     #déplacement des différents alien :
     alien  = [alien0,alien1,alien2]
     for invader in alien:
         if missile[0] != False :
             if(invader.vie>0):
-                if(f.collision(invader,missile[0])):
+                if(collision(invader)):
                     missile[0]=False
                     Zone_jeux.delete(missile_graph[0])
                     alien_mort += 1
-    if (alien_mort>=nb_alien):
+    if (alien_mort>nb_alien):
         messagebox.showinfo("Les breton batte en retraite","La normandie peut etre fiere de vous")
         Zone_jeux.delete('all')
     elif not roger.vie == 0 :
         alien_missile()
         deplacement_missile()
-        if not alien0.vie == 0: 
+        #Test des collion entre les missiles et les différents éléments
+        if missile[0] != False:
+            collision(alien0)
+            collision(alien1)
+            collision(alien2)
+        if missile[1] != False:
+            touche = collision(roger)
+            if touche :
+                Zone_jeux.delete(missile_graph[0])
+        if not alien0.vie == 0:
             alien0.deplacement()
             Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
         else :
             Zone_jeux.delete(alien0_rec)
+            Zone_jeux.delete(missile_graph[0])
         if not alien1.vie == 0: 
             alien1.deplacement()
             Zone_jeux.coords(alien1_rec,alien1.x0,alien1.y0,alien1.x1,alien1.y1)
         else :
             Zone_jeux.delete(alien1_rec)
+            Zone_jeux.delete(missile_graph[0])
         if not alien2.vie == 0: 
             alien2.deplacement()
             Zone_jeux.coords(alien2_rec,alien2.x0,alien2.y0,alien2.x1,alien2.y1)
         else :
             Zone_jeux.delete(alien2_rec)
+            Zone_jeux.delete(missile_graph[0])
+        score_aff.set("score: "+str(score))
         mw.after(50,lambda:bigloop(alien_mort)) #mise à jour toutes les 50 ms
     else:
         messagebox.showinfo("GAME OVER","Vous avez perdu")
+
 
 def droite():
     # permet de deplacer le vaisseau sur la droite
@@ -89,11 +109,13 @@ def gauche():
 
 def alien_missile():
     # fonction qui permet de faire tirer les alien
-    alien  = [alien0,alien1,alien2]
-    tireur = f.tir_alien(alien) # on choisi qu'elle alien va tirer
-    if missile[1] == False: # on detecte si il n'y a pas deja de missile alien
-        missile[1] = f.Missile(tireur.x0,tireur.y1,'alien',tireur.largeur,tireur.hauteur) # crée le missile
-        missile_graph[1] = Zone_jeux.create_image(missile[1].x,missile[1].y,image= img_missile) # affiche le missile
+    global nb_alien
+    if nb_alien !=0:
+        alien  = [alien0,alien1,alien2]
+        tireur = f.tir_alien(alien) # on choisi quel alien va tirer
+        if missile[1] == False: # on detecte si il n'y a pas deja de missile alien
+            missile[1] = f.Missile(tireur.x0,tireur.y1,'alien',tireur.largeur,tireur.hauteur) # crée le missile
+            missile_graph[1] = Zone_jeux.create_image(missile[1].x,missile[1].y,image= img_missile) # affiche le missile
 
 def tirer():
     # fonction qui permet de faire tirer le vaisseau
@@ -106,7 +128,7 @@ def deplacement_missile():
     cpt=0
     while cpt < len(missile):
         if missile[cpt] != False:# on regarde si le missile est tirer
-            if missile[cpt].y0 <=10 or missile[cpt].y1 >=310: # on regarde si le missile touche un bord
+            if missile[cpt].y0 <=10 or missile[cpt].y1 >= 310: # on regarde si le missile touche un bord
                 Zone_jeux.delete(missile_graph[cpt])# on efface le missile
                 missile[cpt] = False# on detruit le missile
             else:
@@ -114,19 +136,28 @@ def deplacement_missile():
                 Zone_jeux.move(missile_graph[cpt],0,missile[cpt].dy)# on deplace le missile
         cpt = cpt+1
 
+def collision(objet) :
+    chevauchement = Zone_jeux.find_overlapping(objet.x0, objet.y0, objet.x1, objet.y1)
+    if len(chevauchement) > 1:
+        objet.vie -= 1
+        return True
+    return False
+
     
 
 # création de la fenêtre graphique
 mw = Tk()
-score = StringVar()
-score.set("score:0")
+score_aff = StringVar()
+score_aff.set("score:0")
+vie_aff = StringVar()
+vie_aff.set("vie:0")
 mw.title('Bretons Invader')
 
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
-img_Mont    = PhotoImage(file='Image/mont_saint_michel.png')
-Zone_jeux.create_image(largeur_mw/2,hauteur_mw/2,image= img_Mont)
+#img_Mont    = PhotoImage(file='Image/mont_saint_michel.png')
+#Zone_jeux.create_image(largeur_mw/2,hauteur_mw/2,image= img_Mont)
 #Initialisationdes éléments graphiques
 alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
 alien1_rec = Zone_jeux.create_rectangle(alien1.x0,alien1.y0,alien1.x1,alien1.y1)
@@ -136,8 +167,11 @@ img_missile = PhotoImage(file='Image/tha_le_misille.png')
 roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)
 
 # Création d'un widget Label (score)
-Label1 = Label(mw,textvariable = score)
-Label1.pack(side = 'bottom', padx = 5, pady = 5)
+Label1 = Label(mw,textvariable = score_aff)
+Label1.pack(side = 'right', padx = 5, pady = 5)
+# Création d'un widget Label (vie)
+Label1 = Label(mw,textvariable = vie_aff)
+Label1.pack(side = 'right', padx = 5, pady = 5)
 
 # Création d'un widget Button (bouton Quitter)
 Button(mw, text ='Quitter' ,command = mw.destroy).pack(side='bottom',padx=5,pady=5)
