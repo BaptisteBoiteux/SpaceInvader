@@ -20,7 +20,7 @@ alien0 = f.Alien(0,60,20)
 alien1 = f.Alien(80,60,20)
 alien2 = f.Alien(160,60,20)
 roger = f.Vaisseau()
-missile = [False,False] # variable qui stocke les classe
+missile = [False,False] # variable qui stocke les classe (0 pour le vaisseau est 1 pour le missile)
 missile_graph = [0,0] # variable qui stocke le graphique du missile
 nb_alien = 3
 score = 0
@@ -45,17 +45,17 @@ def Commencer():
 
 def bigloop (alien_mort):
     global score
-    print(roger.vie)
     #déplacement des différents alien :
     alien  = [alien0,alien1,alien2]
     for invader in alien:
         if missile[0] != False :
-            if(invader.vie>=0):
+            if(invader.vie>0):
                 if(collision(invader)):
+                    print('missile_suprimer')
                     missile[0]=False
                     Zone_jeux.delete(missile_graph[0])
                     alien_mort += 1
-    if (alien_mort>nb_alien):
+    if (alien_mort>=nb_alien):
         messagebox.showinfo("Les breton batte en retraite","La normandie peut etre fiere de vous")
         Zone_jeux.delete('all')
     elif not roger.vie == 0 :
@@ -71,19 +71,19 @@ def bigloop (alien_mort):
             Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
         else :
             Zone_jeux.delete(alien0_rec)
-            Zone_jeux.delete(missile_graph[0])
+            Zone_jeux.delete(missile_graph[1])
         if not alien1.vie == 0: 
             alien1.deplacement()
             Zone_jeux.coords(alien1_rec,alien1.x0,alien1.y0,alien1.x1,alien1.y1)
         else :
             Zone_jeux.delete(alien1_rec)
-            Zone_jeux.delete(missile_graph[0])
+            Zone_jeux.delete(missile_graph[1])
         if not alien2.vie == 0: 
             alien2.deplacement()
             Zone_jeux.coords(alien2_rec,alien2.x0,alien2.y0,alien2.x1,alien2.y1)
         else :
             Zone_jeux.delete(alien2_rec)
-            Zone_jeux.delete(missile_graph[0])
+            Zone_jeux.delete(missile_graph[1])
         score_aff.set("score: "+str(score))
         mw.after(50,lambda:bigloop(alien_mort)) #mise à jour toutes les 50 ms
     else:
@@ -115,6 +115,7 @@ def alien_missile():
 
 def tirer():
     # fonction qui permet de faire tirer le vaisseau
+    print (missile[0] == False)
     if missile[0] == False: # on detecte si il n'y a pas deja de missile tirer
         missile[0] = f.Missile(roger.x0,roger.y0,'vaisseau',roger.largeur,roger.hauteur) # crée le missile
         missile_graph[0] = Zone_jeux.create_image(missile[0].x,missile[0].y,image= img_missile) # affiche le missile
