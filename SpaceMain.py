@@ -4,7 +4,8 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO : Zones_jeux.find_overlaping
+TODO : Voir nombres de vies vaisseaux
+Remarques : les erreurs sont dû à l'apparition du missile mais n'empèchent pas le bon fonctionement du jeu
 """
 
 #Importation des bibilothèques
