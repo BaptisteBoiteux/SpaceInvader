@@ -19,12 +19,12 @@ alinen_bonus = []
 alien0 = f.Alien(0,60,20)
 alien1 = f.Alien(80,60,20)
 alien2 = f.Alien(160,60,20)
+ilot_gauche = f.Ilot(0,200)
 roger = f.Vaisseau()
 missile = [False,False] # variable qui stocke les classe
 missile_graph = [0,0] # variable qui stocke le graphique du missile
 nb_alien = 3
 score = 0
-vie = 3
 
 #variables globales utilisées dans tout le programme 
 largeur_mw = 480
@@ -50,23 +50,22 @@ def bigloop (alien_mort):
     alien  = [alien0,alien1,alien2]
     for invader in alien:
         if missile[0] != False :
-            if(invader.vie>0):
+            if(invader.vie>=0):
                 if(collision(invader)):
                     missile[0]=False
                     Zone_jeux.delete(missile_graph[0])
                     alien_mort += 1
-    if (alien_mort>nb_alien):
-        messagebox.showinfo("Les breton batte en retraite","La normandie peut etre fiere de vous")
+    if (alien_mort >= nb_alien):
+        messagebox.showinfo("Les breton batte en retraite","La normandie peut être fiere de vous")
         Zone_jeux.delete('all')
     elif not roger.vie == 0 :
         alien_missile()
         deplacement_missile()
         #Test des collion entre les missiles et les différents éléments
-        if missile[0] != False:
-            collision(alien0)
-            collision(alien1)
-            collision(alien2)
-            collision(roger)
+        if missile[1] != False: 
+            if collision(roger) :
+                missile[1] = False
+                Zone_jeux.delete(missile_graph[1])
         if not alien0.vie == 0:
             alien0.deplacement()
             Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
@@ -85,10 +84,13 @@ def bigloop (alien_mort):
         else :
             Zone_jeux.delete(alien2_rec)
             Zone_jeux.delete(missile_graph[0])
+        score = alien_mort*25
         score_aff.set("score: "+str(score))
+        vie_aff.set("vie: "+str(roger.vie))
         mw.after(50,lambda:bigloop(alien_mort)) #mise à jour toutes les 50 ms
     else:
         messagebox.showinfo("GAME OVER","Vous avez perdu")
+        Zone_jeux.delete('all')
 
 
 def droite():
@@ -135,7 +137,7 @@ def deplacement_missile():
 
 def collision(objet) :
     chevauchement = Zone_jeux.find_overlapping(objet.x0, objet.y0, objet.x1, objet.y1)
-    if len(chevauchement) > 1:
+    if len(chevauchement) > 2:
         objet.vie -= 1
         return True
     return False
@@ -147,18 +149,19 @@ mw = Tk()
 score_aff = StringVar()
 score_aff.set("score:0")
 vie_aff = StringVar()
-vie_aff.set("vie:0")
+vie_aff.set("vie:3")
 mw.title('Bretons Invader')
 
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
-#img_Mont    = PhotoImage(file='Image/mont_saint_michel.png')
-#Zone_jeux.create_image(largeur_mw/2,hauteur_mw/2,image= img_Mont)
+img_Mont    = PhotoImage(file='Image/mont_saint_michel.png')
+Zone_jeux.create_image(largeur_mw/2,hauteur_mw/2,image= img_Mont)
 #Initialisationdes éléments graphiques
 alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
 alien1_rec = Zone_jeux.create_rectangle(alien1.x0,alien1.y0,alien1.x1,alien1.y1)
 alien2_rec = Zone_jeux.create_rectangle(alien2.x0,alien2.y0,alien2.x1,alien2.y1)
+ilot_gauche_rec = Zone_jeux.create_rectangle(ilot_gauche.x0,ilot_gauche.y0,ilot_gauche.x1,ilot_gauche.y1, fill = 'black')
 img_vaisseau = PhotoImage(file='Image/Logo_RogerVoyage1.png')
 img_missile = PhotoImage(file='Image/tha_le_misille.png')
 roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)

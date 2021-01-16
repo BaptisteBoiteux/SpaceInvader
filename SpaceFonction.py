@@ -122,12 +122,12 @@ class Missile():
 class Ilot :
      def __init__(self,x0,y0):
         self.largeur = 50
-        self.hauteur = 10
-        self.x0 = 220
-        self.x1 = self.x0 + self.largeur
-        self.y0 = 350
-        self.y1 = self.y0 + self.hauteur
         self.vie = 5
+        self.hauteur = self.vie*10
+        self.x0 = x0
+        self.x1 = self.x0 + self.largeur
+        self.y0 = y0
+        self.y1 = self.y0 + self.hauteur
 
 
 
