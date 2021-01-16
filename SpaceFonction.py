@@ -18,41 +18,62 @@ def Apropos():
     messagebox.showinfo("A Propos","Ce jeu à été créer par Julien Mercier et Baptiste Boiteux\nIl s'inspire du jeux Space Invader conçu par Tomohiro Nishikado en 1978")
 
 class Alien():
-    #Les variables ci-dessous seeont valables pour tous les Alien
-    dx = 2 #déplacement horizontale
-    dy = 5 #déplacement vertical 
-    rebond = 0 #nombres de rebond effectué en tout par le Alien
-    y0 = 20 #position verticale des Aliens, elle est général car doit changer en même temps pour tous les Alien
-    def __init__(self,x0,largeur,hauteur):
+    def __init__(self,x0,y0,largeur,hauteur):
         """Initialisation de l'alien"""
         self.x0 = x0
         self.largeur = largeur
         self.x1 = x0 + largeur
-        self.y0 = Alien.y0
+        self.y0 = y0
         self.hauteur = hauteur
-        self.y1 = Alien.y0 + hauteur
+        self.y1 = y0 + hauteur
         self.vie = 1
+    
+class Alien_bonus(Alien):
+
+    def __init__(self,x0,y0,largeur,hauteur,dx):
+        super().__init__(x0,y0,largeur,hauteur)
+        self.dx = dx 
+    def deplacement(self):
+        largeur_mw = 480 #on rappel ici la largeur de la fenêtre tkinter
+        if self.x1 + self.dx > largeur_mw: #on detecte si l'Alien sort de la fenêtre à son prochain déplacement
+            self.x0 = largeur_mw - self.largeur #on replace l'alien de droite à sa position en fin de fenêtre
+            self.dx = -self.dx # on change le déplacement de sens pour tous les Alien
+        if self.x0 + self.dx < 0:
+            self.x0 = 0
+            self.dx = -self.dx # on change le déplacement de sens pour tous les Alien
+        self.x0 += self.dx
+        self.x1 = self.x0 + self.largeur
+        
+        
+class Alien_normal(Alien):
+    #Les variables ci-dessous seeont valables pour tous les Alien
+    dx = 2 #déplacement horizontale
+    dy = 5 #déplacement vertical 
+    y0 = 20 
+    rebond = 0 #nombres de rebond effectué en tout par le Alien
+    def __init__(self,x0,largeur,hauteur):
+        super().__init__(x0,Alien_normal.y0,largeur,hauteur)
     def deplacement(self):
         """ Deplacement de l'alien"""
         largeur_mw = 480 #on rapelle ici la largeur de la fenêtre tkinter
         # rebond à droite
-        if self.x1 + Alien.dx > largeur_mw: #on detecte si l'Alien sort de la fenêtre à son prochain déplacement
-            self.x0 = largeur_mw - (self.largeur - 2*Alien.dx) #on replace l'alien de droite à sa position en fin de fenêtre (on enlève 2*dx pour éviter le rapprochement des aliens)
-            Alien.dx = -Alien.dx # on change le déplacement de sens pour tous les Alien
-            Alien.rebond += 1
+        if self.x1 + Alien_normal.dx > largeur_mw: #on detecte si l'Alien sort de la fenêtre à son prochain déplacement
+            self.x0 = largeur_mw - (self.largeur - 2*Alien_normal.dx) #on replace l'alien de droite à sa position en fin de fenêtre (on enlève 2*dx pour éviter le rapprochement des aliens)
+            Alien_normal.dx = -Alien_normal.dx # on change le déplacement de sens pour tous les Alien
+            Alien_normal.rebond += 1
         # rebond à gauche (même fonctionement que ci-dessus)
-        if self.x0 + Alien.dx < 0:
+        if self.x0 + Alien_normal.dx < 0:
             self.x0 = 0
-            Alien.dx = -Alien.dx
-            Alien.rebond +=1
+            Alien_normal.dx = -Alien_normal.dx
+            Alien_normal.rebond +=1
         #descente de l'alien
-        if Alien.rebond == 2: #on detecte un aller-retour des Aliens
-            Alien.y0 += Alien.dy #changement de la postion de tous les Alien
-            Alien.rebond = 0
+        if Alien_normal.rebond == 2: #on detecte un aller-retour des Aliens
+            Alien_normal.y0 += Alien_normal.dy #changement de la postion de tous les Alien
+            Alien_normal.rebond = 0
         #Affectation des attributs généraux à l'alien "appelé"
-        self.x0 += Alien.dx
+        self.x0 += Alien_normal.dx
         self.x1 = self.x0 + self.largeur
-        self.y0 = Alien.y0
+        self.y0 = Alien_normal.y0
         self.y1 = self.y0 + self.hauteur
 
 class Vaisseau():
@@ -89,12 +110,13 @@ class Missile():
         self.vie = 1
         self.hauteur = 40
         self.largeur = 40
+        self.hitbox  =5
         if self.sens == 'vaisseau':
             self.x  = x+(largeur/2)# permet de determiner le x afin permettant d'afficher un missile
             self.y  = y-(self.hauteur/2)# permet de determiner le y afin permettant d'afficher un misile
             # initialiser les coordonées du missile
-            self.x0 = x
-            self.x1 = x+self.largeur
+            self.x0 = self.x-self.hitbox
+            self.x1 = self.x+self.hitbox
             self.y0 = y-self.hauteur
             self.y1 = y
             self.dy = -self.dy # le dy est inverser car le missile monte
@@ -102,8 +124,8 @@ class Missile():
             self.x  = x+(largeur/2)     # permet de determiner le x afin permettant d'afficher un misile
             self.y  = y+(self.hauteur/2)# permet de determiner le y afin permettant d'afficher un misile
             # initialiser les coordonées du missile
-            self.x0 = x+(largeur/2)-(self.largeur/2)
-            self.x1 = x+(largeur/2)+(self.largeur/2)
+            self.x0 = self.x-self.hitbox
+            self.x1 = self.x+self.hitbox
             self.y0 = y
             self.y1 = y+self.hauteur
     def deplacement_missile(self):
