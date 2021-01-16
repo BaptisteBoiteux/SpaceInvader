@@ -66,10 +66,7 @@ def bigloop (alien_mort):
             collision(alien0)
             collision(alien1)
             collision(alien2)
-        if missile[1] != False:
-            touche = collision(roger)
-            if touche :
-                Zone_jeux.delete(missile_graph[0])
+            collision(roger)
         if not alien0.vie == 0:
             alien0.deplacement()
             Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
