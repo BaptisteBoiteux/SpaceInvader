@@ -50,7 +50,7 @@ def bigloop (alien_mort):
     alien  = [alien0,alien1,alien2]
     for invader in alien:
         if missile[0] != False :
-            if(invader.vie>0):
+            if(invader.vie>=0):
                 if(collision(invader)):
                     missile[0]=False
                     Zone_jeux.delete(missile_graph[0])
@@ -62,14 +62,10 @@ def bigloop (alien_mort):
         alien_missile()
         deplacement_missile()
         #Test des collion entre les missiles et les différents éléments
-        if missile[0] != False:
-            collision(alien0)
-            collision(alien1)
-            collision(alien2)
-        if missile[1] != False:
-            touche = collision(roger)
-            if touche :
-                Zone_jeux.delete(missile_graph[0])
+        if missile[1] != False: 
+            if collision(roger) :
+                missile[1] = False
+                Zone_jeux.delete(missile_graph[1])
         if not alien0.vie == 0:
             alien0.deplacement()
             Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
@@ -138,7 +134,7 @@ def deplacement_missile():
 
 def collision(objet) :
     chevauchement = Zone_jeux.find_overlapping(objet.x0, objet.y0, objet.x1, objet.y1)
-    if len(chevauchement) > 1:
+    if len(chevauchement) > 2:
         objet.vie -= 1
         return True
     return False
@@ -156,8 +152,8 @@ mw.title('Bretons Invader')
 # Création d'un widget Canvas (zone graphique)
 Zone_jeux = Canvas(mw, width = largeur_mw, height = hauteur_mw, bg ='grey')
 Zone_jeux.pack(side = 'top',padx =5, pady =5)
-#img_Mont    = PhotoImage(file='Image/mont_saint_michel.png')
-#Zone_jeux.create_image(largeur_mw/2,hauteur_mw/2,image= img_Mont)
+img_Mont    = PhotoImage(file='Image/mont_saint_michel.png')
+Zone_jeux.create_image(largeur_mw/2,hauteur_mw/2,image= img_Mont)
 #Initialisationdes éléments graphiques
 alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
 alien1_rec = Zone_jeux.create_rectangle(alien1.x0,alien1.y0,alien1.x1,alien1.y1)
