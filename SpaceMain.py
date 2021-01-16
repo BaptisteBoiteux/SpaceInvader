@@ -4,7 +4,7 @@ quoi :Programme principal du projet Space Invador
 qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
-TODO : Voir nombres de vies vaisseaux
+TODO : Changer les alien en drapeaux bretons
 Remarques : les erreurs sont dû à l'apparition du missile mais n'empèchent pas le bon fonctionement du jeu
 """
 
@@ -19,14 +19,15 @@ hauteur_mw = 320
 play = False
 
 #création des différentes entitées de chaques classes
-alinen_bonus = []
-alien0 = f.Alien(0,60,20)
-alien1 = f.Alien(80,60,20)
-alien2 = f.Alien(160,60,20)
+alien_bonus = []
+alien_bonus_graph = [0]
 ilot0 = f.Ilot((largeur_mw/5)-50,200)
 ilot1 = f.Ilot((2*largeur_mw/5)-50,200)
 ilot2 = f.Ilot((3*largeur_mw/5),200)
 ilot3 = f.Ilot((4*largeur_mw/5),200)
+alien0 = f.Alien_normal(0,60,20)
+alien1 = f.Alien_normal(80,60,20)
+alien2 = f.Alien_normal(160,60,20)
 roger = f.Vaisseau()
 missile = [False,False] # variable qui stocke les classe (0 pour le vaisseau est 1 pour le missile)
 missile_graph = [0,0] # variable qui stocke le graphique du missile
@@ -36,18 +37,35 @@ score = 0
 def Commencer():
     """Lancement de la boucle de jeu"""
     global play
-
     if not play : #on detecte si le jeu à déjà été lancé 
         alien_mort = 0
+        cpt = 0
         mw.bind('<Right>', lambda _:droite())
         mw.bind('<Left>', lambda _:gauche())
         mw.bind('<space>', lambda _:tirer())
-        bigloop(alien_mort)
+        bigloop(alien_mort,cpt)
     play = True #on stocke le fait que le jeu ai été lancé
 
-def bigloop (alien_mort):
-    global score,play
+def bigloop (alien_mort,cpt):
+    global score, play
+    # on gere l'alien bonus pour qu'il apparaise toute les 10 seconde et disparaise apres 5 seconde
+    if cpt==200:
+        alien_bonus.append(f.Alien_bonus(0,0,40,15,5))
+        alien_bonus_graph[0]= Zone_jeux.create_rectangle(alien_bonus[0].x0,alien_bonus[0].y0,alien_bonus[0].x1,alien_bonus[0].y1)
+    if cpt==375:
+        if alien_bonus:
+            alien_bonus.pop(0)
+            Zone_jeux.delete(alien_bonus_graph[0])
+        cpt = 0
     #déplacement des différents alien :
+    if (not alien_bonus) == False:
+        if missile[0] != False :
+            if(collision(alien_bonus[0])): 
+                missile[0]=False
+                Zone_jeux.delete(missile_graph[0])
+                Zone_jeux.delete(alien_bonus_graph[0]) 
+                score += 150
+                alien_bonus.pop(0)    
     alien  = [alien0,alien1,alien2]
     for invader in alien:
         if missile[0] != False :
@@ -61,13 +79,17 @@ def bigloop (alien_mort):
         messagebox.showinfo("Les bretons battent en retraite !","La normandie peut être fière de vous")
         Zone_jeux.delete('all')
     elif not roger.vie == 0 :
-        alien_missile()
+        if (cpt%100 == 0):
+            alien_missile()
         deplacement_missile()
         #Test des collion entre les missiles et les différents éléments
         if missile[1] != False: 
             if collision(roger):
                 missile[1] = False
                 Zone_jeux.delete(missile_graph[1])
+        if (not alien_bonus) == False:
+            alien_bonus[0].deplacement()
+            Zone_jeux.coords(alien_bonus_graph[0],alien_bonus[0].x0,alien_bonus[0].y0,alien_bonus[0].x1,alien_bonus[0].y1)
         if not alien0.vie == 0:
             alien0.deplacement()
             Zone_jeux.coords(alien0_rec,alien0.x0,alien0.y0,alien0.x1,alien0.y1)#Changements des coordonnées
@@ -107,10 +129,10 @@ def bigloop (alien_mort):
             Zone_jeux.delete(ilot2_rec)
         if ilot3.vie == 0 :
             Zone_jeux.delete(ilot3_rec)
-        
         score_aff.set("score: "+str(score))
         vie_aff.set("vie: "+str(roger.vie))
-        mw.after(50,lambda:bigloop(alien_mort)) #mise à jour toutes les 50 ms
+        cpt += 1
+        mw.after(50,lambda:bigloop(alien_mort,cpt)) #mise à jour toutes les 50 ms
     else:
         messagebox.showinfo("GAME OVER","Vous avez perdu")
         Zone_jeux.delete('all')
@@ -205,6 +227,7 @@ Button(mw, text ='Quitter' ,command = mw.destroy).pack(side='bottom',padx=5,pady
 
 # Création d'un widget Button (bouton Commencer)
 Button(mw, text ='Commencer', command = Commencer).pack(side='bottom',padx=5,pady=5)
+
 
 # Création d'un widget Menu
 menubar = Menu(mw)
