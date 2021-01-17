@@ -27,6 +27,8 @@ class Alien():
         self.hauteur = hauteur
         self.y1 = y0 + hauteur
         self.vie = 1
+        self.x = self.x0 + self.largeur/2
+        self.y = self.y0 + self.hauteur/2
     
 class Alien_bonus(Alien):
 
@@ -48,7 +50,7 @@ class Alien_bonus(Alien):
 class Alien_normal(Alien):
     #Les variables ci-dessous seeont valables pour tous les Alien
     dx = 2 #déplacement horizontale
-    dy = 5 #déplacement vertical 
+    dy = 0 #déplacement vertical 
     y0 = 20 
     rebond = 0 #nombres de rebond effectué en tout par le Alien
     def __init__(self,x0,largeur,hauteur):
@@ -67,14 +69,20 @@ class Alien_normal(Alien):
             Alien_normal.dx = -Alien_normal.dx
             Alien_normal.rebond +=1
         #descente de l'alien
-        if Alien_normal.rebond == 2: #on detecte un aller-retour des Aliens
+        if Alien_normal.rebond == 2 : #on detecte un aller-retour des Aliens
+            Alien_normal.dy = 10
             Alien_normal.y0 += Alien_normal.dy #changement de la postion de tous les Alien
             Alien_normal.rebond = 0
+            self.dy = Alien_normal.dy
+        else :
+            self.dy = 0
         #Affectation des attributs généraux à l'alien "appelé"
         self.x0 += Alien_normal.dx
         self.x1 = self.x0 + self.largeur
         self.y0 = Alien_normal.y0
         self.y1 = self.y0 + self.hauteur
+        self.x = self.x0 + self.largeur/2
+        self.y = self.y0 + self.hauteur/2
 
 class Vaisseau():
     def __init__(self):
