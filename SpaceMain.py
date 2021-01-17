@@ -142,6 +142,7 @@ def bigloop (alien_mort,cpt):
         fin_jeux()
 
 def fin_jeux():
+    # cette fonction permet de remetre les alien et le vaissseau a leur place de depart pour pouvoir recommencer le jeux
     global play, ilot0, ilot1, ilot2, ilot3, alien0, alien1, alien2, roger, ilot0_rec, ilot1_rec, ilot2_rec, ilot3_rec, roger_vaisseau, alien0_rec, alien1_rec ,alien2_rec
     play = False
     Zone_jeux.create_image(largeur_mw/2,hauteur_mw/2,image= img_Mont)
@@ -154,11 +155,14 @@ def fin_jeux():
     ilot2 = f.Ilot((3*largeur_mw/5),200)
     ilot3 = f.Ilot((4*largeur_mw/5),200)
     alien0 = f.Alien_normal(0,60,20)
-    print (alien0.vie)
+    alien0.y0 = 20
+    alien0.y1 = 40
     alien1 = f.Alien_normal(80,60,20)
-    print (alien1.vie)
+    alien1.y0 = 20
+    alien1.y1 = 40
     alien2 = f.Alien_normal(160,60,20)
-    print (alien2.vie)
+    alien2.y0 = 20
+    alien2.y1 = 40
     roger = f.Vaisseau()
     alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
     alien1_rec = Zone_jeux.create_rectangle(alien1.x0,alien1.y0,alien1.x1,alien1.y1)
