@@ -165,6 +165,8 @@ class Ilot :
 def tir_alien(alien):
     nb_alien_vie=[]
     for invader in alien:
+        print (invader.vie )
+        print (invader.vie>0)
         if invader.vie>0:
             nb_alien_vie.append(invader)
     rand = random.randint (0,len(nb_alien_vie)-1)
