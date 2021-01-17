@@ -5,7 +5,7 @@ qui : Baptiste Boiteux, Mercier Julien
 quand : 18/12/20
 repertoire git : https://github.com/BaptisteBoiteux/SpaceInvader.git
 TODO : Changer les alien en drapeaux bretons
-Remarques : les erreurs sont dû à l'apparition du missile mais n'empèchent pas le bon fonctionement du jeu
+Remarques : Des erreurs s'affichent sur VSCODE : elles sont dûes à l'apparition du missile mais n'empèchent pas le bon fonctionement du jeu
 """
 
 #Importation des bibilothèques
@@ -77,7 +77,7 @@ def bigloop (alien_mort,cpt):
                     alien_mort += 1
                     score += 25 #on incrémente le score
     if (alien_mort >= nb_alien):
-        #fin de partie
+        #fin de partie gagné
         messagebox.showinfo("Les bretons battent en retraite !","La normandie peut être fière de vous")
         Zone_jeux.delete('all')
         play = False
@@ -139,11 +139,13 @@ def bigloop (alien_mort,cpt):
             Zone_jeux.delete(ilot2_rec)
         if ilot3.vie == 0 :
             Zone_jeux.delete(ilot3_rec)
+        #mise à jour de l'affichage du score
         score_aff.set("score: "+str(score))
         vie_aff.set("vie: "+str(roger.vie))
         cpt += 1
         mw.after(50,lambda:bigloop(alien_mort,cpt)) #mise à jour toutes les 50 ms
     else:
+        #fin de partie perdu
         messagebox.showinfo("GAME OVER","Vous avez perdu")
         Zone_jeux.delete('all')
         fin_jeux()
@@ -213,6 +215,7 @@ def deplacement_missile():
         cpt = cpt+1
 
 def collision(objet) :
+    """gère la collision sur un objet et lui enlève une vie"""
     chevauchement = Zone_jeux.find_overlapping(objet.x0, objet.y0, objet.x1, objet.y1)
     if len(chevauchement) > 2:
         objet.vie -= 1
@@ -224,9 +227,9 @@ def collision(objet) :
 # création de la fenêtre graphique
 mw = Tk()
 score_aff = StringVar()
-score_aff.set("score:0")
+score_aff.set("score: 0")
 vie_aff = StringVar()
-vie_aff.set("vie:3")
+vie_aff.set("vie: 3")
 mw.title('Bretons Invader')
 
 # Création d'un widget Canvas (zone graphique)
