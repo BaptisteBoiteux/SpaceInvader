@@ -58,7 +58,7 @@ def bigloop (alien_mort,cpt):
             alien_bonus.pop(0)
             Zone_jeux.delete(alien_bonus_graph[0])
         cpt = 0
-    #déplacement des différents alien :
+    #detecte si l'alien bonus se fait toucher
     if (not alien_bonus) == False:
         if missile[0] != False :
             if(collision(alien_bonus[0])): 
@@ -66,7 +66,8 @@ def bigloop (alien_mort,cpt):
                 Zone_jeux.delete(missile_graph[0])
                 Zone_jeux.delete(alien_bonus_graph[0]) 
                 score += 150
-                alien_bonus.pop(0)    
+                alien_bonus.pop(0) 
+    #detecte si les alien se font toucher   
     alien  = [alien0,alien1,alien2]
     for invader in alien:
         if missile[0] != False :
@@ -77,10 +78,12 @@ def bigloop (alien_mort,cpt):
                     alien_mort += 1
                     score = alien_mort*25
     if (alien_mort >= nb_alien):
+        # bravo vous avez tué tous les aliens
         messagebox.showinfo("Les bretons battent en retraite !","La normandie peut être fière de vous")
         Zone_jeux.delete('all')
         play = False
         fin_jeux()
+    # on regarde si le vaisseau a toujour des vie
     elif not roger.vie == 0 :
         if (cpt%100 == 0):
             alien_missile()
@@ -143,17 +146,22 @@ def bigloop (alien_mort,cpt):
 
 def fin_jeux():
     # cette fonction permet de remetre les alien et le vaissseau a leur place de depart pour pouvoir recommencer le jeux
-    global play, ilot0, ilot1, ilot2, ilot3, alien0, alien1, alien2, roger, ilot0_rec, ilot1_rec, ilot2_rec, ilot3_rec, roger_vaisseau, alien0_rec, alien1_rec ,alien2_rec
-    play = False
+    global play, score, ilot0, ilot1, ilot2, ilot3, alien0, alien1, alien2, roger, ilot0_rec, ilot1_rec, ilot2_rec, ilot3_rec, roger_vaisseau, alien0_rec, alien1_rec ,alien2_rec
+    play = False # on met a False pour faire recommencer le jeux quand on clique sur play
+    score = 0
+    # on remet le fond
     Zone_jeux.create_image(largeur_mw/2,hauteur_mw/2,image= img_Mont)
+    # on réinitialise les missile
     missile = [False,False]
     missile_graph = [0,0] 
-    alien_bonus = []
-    alien_bonus_graph = [0]
+    # on réinitialise les aliens
     ilot0 = f.Ilot((largeur_mw/5)-50,200)
     ilot1 = f.Ilot((2*largeur_mw/5)-50,200)
     ilot2 = f.Ilot((3*largeur_mw/5),200)
     ilot3 = f.Ilot((4*largeur_mw/5),200)
+    # on réinitialise les aliens
+    alien_bonus = []
+    alien_bonus_graph = [0]
     alien0 = f.Alien_normal(0,60,20)
     alien0.y0 = 20
     alien0.y1 = 40
@@ -163,14 +171,18 @@ def fin_jeux():
     alien2 = f.Alien_normal(160,60,20)
     alien2.y0 = 20
     alien2.y1 = 40
+    # on réinitialise le vaisseau
     roger = f.Vaisseau()
+    # on réinitialise l'affichage des aliens
     alien0_rec = Zone_jeux.create_rectangle(alien0.x0,alien0.y0,alien0.x1,alien0.y1)
     alien1_rec = Zone_jeux.create_rectangle(alien1.x0,alien1.y0,alien1.x1,alien1.y1)
     alien2_rec = Zone_jeux.create_rectangle(alien2.x0,alien2.y0,alien2.x1,alien2.y1)
+    # on réinitialise l'affichage des ilos
     ilot0_rec = Zone_jeux.create_rectangle(ilot0.x0,ilot0.y0,ilot0.x1,ilot0.y1, fill = 'black')
     ilot1_rec = Zone_jeux.create_rectangle(ilot1.x0,ilot1.y0,ilot1.x1,ilot1.y1, fill = 'black')
     ilot2_rec = Zone_jeux.create_rectangle(ilot2.x0,ilot2.y0,ilot2.x1,ilot2.y1, fill = 'black')
     ilot3_rec = Zone_jeux.create_rectangle(ilot3.x0,ilot3.y0,ilot3.x1,ilot3.y1, fill = 'black')
+    # on réinitialise l'affichage du vaisseau
     roger_vaisseau = Zone_jeux.create_image(roger.x,roger.y,image= img_vaisseau)
 
 

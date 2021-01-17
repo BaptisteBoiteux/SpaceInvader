@@ -171,11 +171,12 @@ class Ilot :
 
 
 def tir_alien(alien):
+    # cette fonction permet de déterminer aléatoirement l'alien qui va tirer
     nb_alien_vie=[]
     for invader in alien:
-        if invader.vie>0:
+        if invader.vie>0: # on regarde si l'alien n'est pas mort
             nb_alien_vie.append(invader)
-    rand = random.randint (0,len(nb_alien_vie)-1)
+    rand = random.randint (0,len(nb_alien_vie)-1) # l'alien est choisi aléatoirement
     return nb_alien_vie[rand]
 
 
